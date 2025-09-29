@@ -1,0 +1,106 @@
+📌NMAP BASICS PORT SCANS
+
+♦️TCP and UDP ports :
+          A TCP and UDP ports are used to identify a network service running on the host. Port is usually to linked to service using the specific port number .
+          for ex  : HTTP server bind to by default 80 and HTTP support SSL/TLS certifiactes by default use 443 port.
+          
+  🔴 At the risk oversimplification,there are two states :
+  1) Open : means service ruuning on that port.
+  2) Closed : means there is no service running on that port.
+  
+  -- in pratical situations ,if firewall blocks our requests then nmap considers following sx states :
+  1) open : service ruuning on the port
+  2) closed : there is no service running on the port
+  3) filtered : this states say that if port is open or closed because firewall blocks our requests to reaching to the port.
+  4) unfiltered : means that Nmap cannot determine if the port is open or closed, although the port is accessible. This state is encountered when using an ACK scan -sA.
+  5) open|filtered : this means that Nmap cannot determine whether the port is open or filtered.
+  6) closed|filtered : This means that Nmap cannot decide whether a port is closed or filtered.
+  
+  Questions :
+  1)Which service uses UDP port 53 by default?
+  ---> DNS
+  2)Which service uses TCP port 22 by default?
+  ---> SSH
+  3)How many port states does Nmap consider?
+  ---> 6
+  4)Which port state is the most interesting to discover as a pentester?
+  ---> open
+  
+  ♦️TCP connect scan :
+            TCP connect scan use 3-way TCP handshake to establise connection .client send TCP SYN flag to server and server respond to client with ACK flag then client complete 3-way handshake with ACK flag .
+            but a pentester we dont want to establish a connection so we send RST,ACK flag . use -sT option to establish a connection
+            command : nmap -sT <target-ip>
+            
+            we can use -F to enable fast mode and decrease the number of scanned ports from 1000 to 100 most common ports.
+     
+Questions : 
+1)Launch the VM. Open the AttackBox and execute nmap -sT 10.201.58.72 via the terminal. A new service has been installed on this VM since our last scan, as shown in the terminal window above. Which port number was closed in the scan above but is now open on this target VM?
+----> 110
+2)What is Nmap’s guess about the newly installed service?
+---> pop3
+
+
+♦️TCP SYN SCAN :
+         we use this scan we doesnt need to complete 3-way handshake and use option -sS
+         client send SYN flag to server then server respond to client using SYN,ACK then client send RST flag to server
+         
+         
+Questions :
+1)Launch the VM. Some new server software has been installed since the last time we scanned it. On the AttackBox, use the terminal to execute nmap -sS MACHINE_IP. What is the new open port?
+---> 6667
+2)What is Nmap’s guess of the service name?
+---> irc
+
+
+♦️UDP SCAN :
+          UDP protocol is connectionless protocol which does not need to complete handshake.We cannot guarantee that a service listening on a UDP port would respond to our packets. 
+          However, if a UDP packet is sent to a closed port, an ICMP port unreachable error (type 3, code 3) is returned. use option -sU for UDP scan.
+          
+Questions :
+1)Launch the VM. On the AttackBox, use the terminal to execute nmap -sU -F -v MACHINE_IP. A new service has been installed since the last scan. What is the UDP port that is now open?
+---> 53
+2)What is the service name according to Nmap?
+---> domain
+
+
+♦️FINE-TUNING SCOPE AND PERFORMANCE :
+           You can control your scan timing using -T0 to -T5 .according to nmap manual it has six templates:
+           Paranoid (0)
+           sneaky (1)
+           polite (2)
+           normal (3)
+           aggressive (4)
+           insane (5)
+           
+To avoid IDS alerts then use -T0 and -T1 . nmap use -T3 normally when you scan any port . -T4 is used when you are playing CTF and -T5 is the most aggresive scan .
+
+You can choose your packet for sending using --min-rate <number> and --max-rate <number> for ex : --max-rate 10 or --max-rate=10 nmap will not sending more than 10 packet per sec.
+
+Questions :
+1)What is the option to scan all the TCP ports between 5000 and 5500?
+---> -p5000-5500
+2)How can you ensure that Nmap will run at least 64 probes in parallel?
+---> --min-parallelisum=64
+3)What option would you add to make Nmap very slow and paranoid?
+---> -T0
+
+
+♦️SUMMARY :
+
+Port Scan Type 	         Example Command
+TCP Connect Scan 	nmap -sT MACHINE_IP
+TCP SYN Scan 	        sudo nmap -sS MACHINE_IP
+UDP Scan 	        sudo nmap -sU MACHINE_IP
+
+
+these scan use when you scan TCP and UDP ports :
+
+Option 	                    Purpose
+-p- 	                  all ports
+-p1-1023 	          scan ports 1 to 1023
+-F 	                  100 most common ports
+-r 	                  scan ports in consecutive order
+-T<0-5> 	          -T0 being the slowest and T5 the fastest
+--max-rate 50 	          rate <= 50 packets/sec
+--min-rate 15 	          rate >= 15 packets/sec
+--min-parallelism 100 	  at least 100 probes in parallel
