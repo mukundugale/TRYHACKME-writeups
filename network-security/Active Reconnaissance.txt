@@ -1,0 +1,56 @@
+Active Reconnaissance :
+
+Active reconnaissance is where we directly connected to the target.
+
+in that we use serveral tools :
+1) Ping :
+       in that ping , ping is used to to check that our target is online ?
+       
+       Ping uses ICMP requests packets if the remote system is online and not blocked by firewall then remote system sends ICMP echo reply.
+       
+Questions:
+1️⃣)Which option would you use to set the size of the data carried by the ICMP echo request?
+--> -s
+
+2️⃣)What is the size of the ICMP header in bytes?
+--> 8
+
+3️⃣Does MS Windows Firewall block ping by default? (Y/N)
+--> Y
+
+4️⃣)Deploy the VM for this task and using the AttackBox terminal, issue the command ping -c 10 10.201.80.223. How many ping replies did you get back?
+--> 10
+
+2)Traceroute :
+         Traceroute is the command where traces the route by the packets from your system to another host and purpose of this is to find ip addresses of the router where packets send fro your system to target system.
+         There is no direct way to discover the path from your system to a target system . we rely on ICMP to “trick” the routers into revealing their IP addresses. We can accomplish this by using a small Time To Live (TTL) in the IP header field. Although the T in TTL stands for time, TTL indicates the maximum number of routers/hops that a packet can pass through before being dropped; TTL is not a maximum number of time units. When a router receives a packet, it decrements the TTL by one before passing it to the next router. The following figure shows that each time the IP packet passes through a router, its TTL value is decremented by 1. Initially, it leaves the system with a TTL value of 64; it reaches the target system with a TTL value of 60 after passing through 4 routers.
+
+for ex if ttl is set to 1 then what happened?
+Answer : the first router will decremented by 1 and then value becomes 0 and the router send the ICMP time exceeded in-transit error message. Note that some routers are configured not to send such ICMP messages when discarding a packet.
+
+command : traceroute 10.201.80.223
+
+3) TELNET : 
+         TELNET stand for teletype network which is used to comminicate with remote system using command-line interface.by default telnet uses port 23.
+         telnet sends all the data, including usernames and passwords, in cleartext. Sending in cleartext makes it easy for anyone, who has access to the communication channel, to steal the login credentials. The secure alternative is SSH (Secure SHell) protocol.
+         
+         command : telnet 10.201.80.223 PORT
+         
+4) NETCAT :
+         use it to gain a “reverse shell” from the target.
+         Netcat “nc” — It can function as a client that connects to a listening port or as a server that listens on a port of your choice.
+         
+         command :  for server -- nc -lvnp port_number
+                    for client -- nc machine-ip port_number
+                    
+
+Putting it all together:
+
+Command 	Example
+ping 	        ping -c 10 10.201.80.223 on Linux or macOS
+ping 	        ping -n 10 10.201.80.223 on MS Windows
+traceroute 	traceroute 10.201.80.223 on Linux or macOS
+tracert 	tracert 10.201.80.223 on MS Windows
+telnet 	        telnet 10.201.80.223 PORT_NUMBER
+netcat as client 	nc 10.201.80.223 PORT_NUMBER
+netcat as server 	nc -lvnp PORT_NUMBER
