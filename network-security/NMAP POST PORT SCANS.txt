@@ -1,0 +1,107 @@
+📌NMAP POST PORT SCANS :
+
+♦️SERVICE DETECTION :
+	After scanning the ports we need to know that what services are running on this port.use (-sV) option to determine service and version for all open ports.
+	with this option, we can manage service detection with intensity using option (--version-light) where intensity range from (--version-light) 0 and (--version-all) 9.
+	with -sV option nmap will do 3-way TCP handshake for establishing the connection.Without establishing the connection nmap doesn't know what service are running on ports.
+	
+	in that -sS(stealth scan) doesn't work beacause this scan won't complete 3-way TCP handshake so this option not choosen.
+	
+	command : nmap -sV --version-light <target-ip>
+	
+Questions :
+1)Start the target machine for this task and launch the AttackBox. Run nmap -sV --version-light 10.201.28.208via the AttackBox. What is the detected version for port 143?
+---> run command to answer this question  : nmap -sV --version-light 10.201.28.208 
+Answer : Dovecot imapd
+2)Which service did not have a version detected with --version-light? 
+---> rpcbind
+
+
+♦️OS DETECTION AND TRACEROUTE :
+	1️⃣OS Detection :
+		Nmap will do Operating System(OS) detection based on its behaviour responses. To enabled this detection use (-O) option.this is not zero its a uppercase of O.
+		command : nmap -sS -O <target-ip>
+		
+		When we detecting OS nmap can find correct OS but unlike version goes wrong so this is very important to know that.
+		
+	2️⃣Traceroute :
+		Nmap to find the routers between you and the target, just add --traceroute.Standard traceroute starts with a packet of low TTL (Time to Live)
+		and keeps increasing until it reaches the target. Nmap’s traceroute starts with a packet of high TTL and keeps decreasing it. 
+		
+		command : nmap -sS -O <target-ip>
+		
+	Questions :
+	1)Run nmap with -O option against 10.201.28.208. What OS did Nmap detect?
+	---> linux
+	
+
+♦️NMAP SCRIPTING ENGINE (NSE) :
+	A script is a piece of code that does not need to be compiled. Nmap provides support for scripts using the Lua language.Nmap Scripting Engine (NSE) 
+	is a Lua interpreter that allows Nmap to execute Nmap scripts written in Lua language.Your Nmap default installation can easily contain close to 600 scripts.
+	check the files at /usr/share/nmap/scripts, and you will notice that there are hundreds of scripts.
+	you want to see which scripts namp have ?  : go to cd /usr/shar/nmap/scripts and type command : ls http*
+        You can choose to run the scripts in the default category using --script=default or simply adding -sC.You can also
+	specify the script by name using --script "SCRIPT-NAME" or a pattern such as --script "ftp*"
+		
+	command : nmap -sS --script "http-date.nse" <target-ip>
+	
+
+Questions :
+1)Knowing that Nmap scripts are saved in /usr/share/nmap/scripts on the AttackBox. What does the script http-robots.txt check for?
+---> first go to directory cd /usr/share/nmap/scripts and type command : less http-robots.txt.nse
+2)Can you figure out the name for the script that checks for the remote code execution vulnerability MS15-034 (CVE2015-1635)?
+---> Go to directory and type command : ls http* and see scripts .
+3)Launch the AttackBox if you haven't already. After you ensure you have terminated the VM from Task 2, start the target machine for this task. On the AttackBox, run Nmap with the default scripts -sC against 10.201.25.83. You will notice that there is a service listening on port 53. What is its full version value?
+---> command : nmap -sS -sC 10.201.25.83
+Answer : 9.18.28-1~deb12u2-Debian
+4)Based on its description, the script ssh2-enum-algos “reports the number of algorithms (for encryption, compression, etc.) that the target SSH2 server offers.” What is the name of the server host key algorithm that relies on SHA2-512 and is supported by 10.201.25.83?
+---> command : nmap -sS -v --script "ssh2-enum-algos.nse" 10.201.25.83
+
+
+♦️SAVING THE OUTPUT :
+	The three main formats are:
+	1)Normal
+	2)Grepable(grep able)
+	3)XML
+	
+	1️⃣Normal :
+		Normal format is similar to when you scanning the target . use this (-oN) option to use this format.N stand for Normal.
+		command : nmap -sS -v -oN machine_scan <target-ip>
+		
+	2️⃣Grepable :
+		Grep = Global Regular Expression Printer.You can save the scan result in grepable format using -oG FILENAME
+		command : nmap -sS -v -oG machine_scan <target-ip>
+		
+	3️⃣XML :
+		 You can save the scan results in XML format using -oX FILENAME
+		 command : nmap -sS -v -oX machine_scan <target-ip>
+		 
+Questions :
+1)Terminate the target machine of the previous task and start the target machine for this task. On the AttackBox terminal, issue the command scp pentester@10.201.87.208:/home/pentester/* . to download the Nmap reports in normal and grepable formats from the target virtual machine.
+
+Note that the username pentester has the password THM17577
+
+Check the attached Nmap logs. How many systems are listening on the HTTPS port?
+---> in terminal type command : scp pentester@10.201.87.208:/home/pentester/* 
+it will download scan result in normal and grepable format. use cat command to answer the question
+Answer : 3
+
+2)What is the IP address of the system listening on port 8089?
+---> 172.17.20.147
+
+
+♦️SUMMARY :
+	
+	Option                                        	Meaning
+-sV 	                                       determine service/version info on open ports
+-sV --version-light 	                       try the most likely probes (2)
+-sV --version-all 	                       try all available probes (9)
+-O 	                                       detect OS
+--traceroute 	                               run traceroute to target
+--script=SCRIPTS 	                       Nmap scripts to run
+-sC or --script=default 	               run default scripts
+-A 	                                       equivalent to -sV -O -sC --traceroute
+-oN 	                                       save output in normal format
+-oG                                            save output in grepable format
+-oX 	                                       save output in XML format
+-oA 	                                       save output in normal, XML and Grepable formats
