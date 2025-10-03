@@ -1,0 +1,180 @@
+📌PROTOCOLS AND SERVERS :
+	
+	♦️TELNET :
+		Telnet is a application layer protocol which is used to connect a virtual terminal to another computer. Using terminal ,a user can log into another computer to access
+		terminal and perform malicious activities like start batch processes, do system administartion tasks remotely.
+		
+		This protocol is very simple. use command : telnet <targer-ip> 
+		but in that when you enter this command a username and password field come so with correct user and pass will enter target terminal.Telnet is insecure when 
+		we capturing via wireshark then this protocol gives a plaintext field which we write pass and username.
+		so telnet is not longer secure option so ssh will become a secure option.
+		
+		command : telnet <target-ip>
+	
+	
+	Questions :
+	1)To which port will the telnet command with the default parameters try to connect?
+	---> To connect : telnet 10.201.108.60
+	Answer : 23
+	
+	
+	♦️HYPER-TEXT TRANSFER PROTOCOL :(HTTP) 
+		HTTP are used for transfer the various web pages.Your web browser connect the web server and uses HTTP to requesting HTML pages and submitting form and upload files.
+		when we use www you use HTTP protocol.
+		HTTP protocol send credential as plaintext(not encrypted) so you can use telnet to communicate to web server and act as a web browser but you need to use HTTP related
+		command so web browser can do it for you.
+		
+		using telnet we can retrieve web pages instead of your web browser . following steps :
+		1)you need to connect to port 80 use command  : telnet 10.201.108.60 80
+		2)next , you need to enter GET /index.html HTTP/1.1 to retrieve the page 
+		3)final, you neet to provide host like host: telnet and press enter .
+		
+		The popular HTTP server(web server) following :
+		1)nginx
+		2)internet information server
+		3)apache
+		
+		The popular HTTP client(web browser) following :
+		1)firefox
+		2)Google chrome
+		3)microsoft edge
+		
+		
+	Questions :
+	1)Launch the attached VM. From the AttackBox terminal, connect using Telnet to 10.201.108.60 80 and retrieve the file flag.thm. What does it contain?
+	---> To answer this question following command use:
+	1) telnet 10.201.108.60 80
+	2)GET /flag.thm HTTP/1.1
+	3)host: telnet and press enter
+	Answer : THM{e3eb0a1df437f3f97a64aca5952c8ea0}
+
+	
+	
+	
+	♦️FILE TRANSFER PROTOCOL(FTP) :
+		File transfer protocol was developed for transfer of file with different computer to different system. FTP send and receives as plaintext so we use telnet client to 
+		communicate with FTP server and acts as a FTP client. following steps :
+		1) type command on terminal : telnet 10.201.108.60 21 . in that we use ftp port 21 by default.
+		2) enter USER frank and PASS D2xc9CgD .in that we logged in
+		
+		some command :
+		1)STAT : to provide some added information.
+		2)PASV : to switching the passive mode
+		
+		--ftp has 2 modes :
+		Active : in the active mode, the data is sent over a separate channel originating from the FTP server’s port 20.
+		Passive : in the passive mode,he data is sent over a separate channel originating from an FTP client’s port above port number 1023.
+		
+		3)TYPE A : to switching file transfer mode to ASCII mode.
+		4)TYPE I : to switching file transfer mode to binary mode
+		in that, we cannot transfer file using simple client like telnet because FTP creates a separate connection for file transfer.
+		
+		lets use actual ftp client to download the text file, type command ftp 10.201.108.60 and enter. then fill name and pass as USER frank and PASS D2xc9CgD and enter.
+		it will open a ftp terminal like ftp> then enter ls command to see the text file .then type ascii to switch the ASCII mode and type get FILE_NAME and it will 
+		download the file.
+		
+		FTP server and FTP client uses FTP protocol. there various FTP server software like vsftpd,proftpd and uFTP and FTP client like fillaZilla with GUI.some browser uses
+		ftp client.
+		
+	Questions :
+	1)Using an FTP client, connect to the VM and try to recover the flag file. What is the flag?
+
+               Username: frank
+               Password: D2xc9CgD
+               
+        ---> To answer this question, use following command :
+        1)ftp 10.201.108.60
+        2)enter name as frank and pass as D2xc9CgD
+        3)type ls commmand and switch to ASCII mode.
+        4)To retrive the file use get command like get FILE_NAME.
+        Answer :THM{364db6ad0e3ddfe7bf0b1870fb06fbdf}
+        
+        
+        ♦️SIMPLE MAIL TRANSFER PROTOCOL :(SMTP)
+        	Email is most useful thing on the internet.Email delivery over the Internet requires the following components:
+        	1)mail user agent(MUA)
+        	2)mail submission agent(MSA)
+        	3)mail transfer agent(MTA)
+        	4)mail delivery agent(MDA)
+        
+        	There are five steps that email is go to the recipient :
+        	1)A mail user agent(MUA) or email client is send to a message. MUA is connected to MSA to send its message.
+        	2)The mail submission agent(MSA) will check for error before transferring to mail transfer agent(MTA).
+        	3)MTA send this message to MTA .MTA has also functioning of MSA.
+        	4)MTA send this message to mail delivery agent(MDA).MTA has also functioning of MDA.
+        	5)The recipient will collect its email from the MDA using their email client.
+        	
+        	The last two was confusing lets for example :
+        	1)You (MUA) want to send postal mail.
+                2)The post office employee (MSA) checks the postal mail for any issues before your local post office (MTA) accepts it.
+                3)The local post office checks the mail destination and sends it to the post office (MTA) in the correct country.
+                4)The post office (MTA) delivers the mail to the recipient mailbox (MDA).
+                5)The recipient (MUA) regularly checks the mailbox for new mail. They notice the new mail, and they take it.
+                
+                we need to follow a protocol to communicate with an HTTP server, and we need to rely on email protocols to talk with an MTA and an MDA. The protocols are:
+                1) simple mail transfer protocol(smtp)
+                2)post office protocol version 3(pop3)
+                3)internet message access protocol(imap)
+                
+                Simple Mail Transfer Protocol (SMTP) is used to communicate with an MTA server. Because SMTP uses cleartext, where all commands are sent without encryption, 
+                we can use a basic Telnet client to connect to an SMTP server and act as an email client (MUA) sending a message.
+		SMTP server listens on port 25 by default. To see basic communication with an SMTP server, we used Telnet to connect to it. Once connected, we issue helo hostname 
+                and then start typing our email.
+                
+        Questions :
+        1)Using the AttackBox terminal, connect to the SMTP port of the target VM. What is the flag that you can get?
+        ---> use command :telnet 10.201.108.60 25
+        Answer : THM{5b31ddfc0c11d81eba776e983c35e9b5}
+        
+        
+        
+        ♦️POST OFFICE PROTOCOL 3(POP3) :
+        	post office protocol 3 is used for downloading email messages from mail delivery agent(MDA).The mail client connects to the POP3 server, authenticates, 
+        	downloads the new email messages before (optionally) deleting them.
+        	
+        	for ex, a user want to download email messages then you want to connect pop3 server pop3 uses default port 110.then user will authenticates with his username and 
+        	password.then use STAT command to know that how many message are there . in that it will give in format +OK 1 179 where format like +OK nn mm.in that nn is 
+        	the size of numbers of email messages are present and mm is the size of the inbox in octects(byte). lIST command will list provided a list of new messages
+        	on the server, and RETR 1 retrieved the first message in the list. 
+        	
+        	
+        	In general, your mail client (MUA) will connect to the POP3 server (MDA), authenticate, and download the messages. Although the communication using the
+        	POP3 protocol will be hidden behind a sleek interface, similar commands will be issued, as shown in the Telnet session.
+        	
+        Questions :
+        1)Connect to the VM (10.201.108.60) at the POP3 port. Authenticate using the username frank and password D2xc9CgD. What is the response you get to STAT?
+        ---> use command : telnet 10.201.108.60 110  and then use command STAT.
+        Answer : +OK 0 0
+        2)How many email messages are available to download via POP3 on 10.201.108.60?
+        ---> 0
+        
+        
+        ♦️INTERNET MESSAGE ACCESS PROTOCOL(IMAP) :
+        	Internet Message Access Protocol (IMAP) is more sophisticated than POP3. IMAP makes it possible to keep your email synchronized across multiple devices 
+        	(and mail clients).we use Telnet to connect to the IMAP server’s default port, and then we authenticate using LOGIN username password. IMAP requires each
+        	command to be preceded by a random string to be able to track the reply. So we added c1, then c2, and so on. Then we listed our mail folders using LIST "" "*",
+        	before checking if we have any new messages in the inbox using EXAMINE INBOX.
+        	
+        	t is clear that IMAP sends the login credentials in cleartext, as we can see in the command LOGIN frank D2xc9CgD. Anyone watching the network traffic would 
+        	be able to know Frank’s username and password.
+        	
+        Questions :
+        1)What is the default port used by IMAP?
+        ---> 143 
+        you ca also use command not for that question to generally use this protocol : telnet 10.201.108.60 143
+        
+        
+       ♦️ SUMMARY  :
+       
+		Protocol 	          TCP Port 	          Application(s) 	       Data Security
+                   FTP                      21 	                   File Transfer 	         Cleartext
+                   HTTP 	            80 	                   Worldwide Web 	         Cleartext
+                   IMAP 	            143 	           Email (MDA) 	                 Cleartext
+                   POP3 	            110 	           Email (MDA) 	                 Cleartext
+                   SMTP 	            25 	                   Email (MTA) 	                 Cleartext
+                   Telnet 	            23 	                   Remote Access 	         Cleartext
+
+                
+
+        
+        
