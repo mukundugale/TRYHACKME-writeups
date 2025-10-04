@@ -59,11 +59,11 @@
 		lists the protocols we have covered and their default ports before and after the encryption upgrade via SSL/TLS.
 		
 		protocol 	Default Port 	Secured Protocol 	Default Port with TLS
-                  HTTP 	             80 	     HTTPS 	                 443
-                  FTP 	             21 	     FTPS 	                 990
-                  SMTP 	             25 	     SMTPS 	                 465
-                  POP3 	             110 	     POP3S 	                 995
-                  IMAP 	             143 	     IMAPS 	                 993
+        HTTP 	             80 	     HTTPS 	                 443
+        FTP 	             21 	     FTPS 	                 990
+        SMTP 	             25 	     SMTPS 	                 465
+        POP3 	             110 	     POP3S 	                 995
+        IMAP 	             143 	     IMAPS 	                 993
                   
                 Consider the case of HTTP.to retrieve a web page over HTTP, the web browser would need at least perform the following two steps:
                 1)To establish a TCP connection with web server.
@@ -140,8 +140,8 @@
     		2)Account Lockout: Locks the account after a certain number of failed attempts.
     		3)Throttling Authentication Attempts: Delays the response to a login attempt. A couple of seconds of delay is tolerable for someone who knows the password, but they
     		can severely hinder automated tools.
-   		4)Using CAPTCHA: Requires solving a question difficult for machines. It works well if the login page is via a graphical user interface (GUI). (Note that CAPTCHA
-   		stands for Completely Automated Public Turing test to tell Computers and Humans Apart.)
+   		    4)Using CAPTCHA: Requires solving a question difficult for machines. It works well if the login page is via a graphical user interface (GUI). (Note that CAPTCHA
+   		    stands for Completely Automated Public Turing test to tell Computers and Humans Apart.)
     		5)Requiring the use of a public certificate for authentication. This approach works well with SSH, for instance.
     		6)Two-Factor Authentication: Ask the user to provide a code available via other means, such as email, smartphone app or SMS.
     		7)There are many other approaches that are more sophisticated or might require some established knowledge about the user, such as IP-based geolocation
@@ -158,11 +158,11 @@
 
 	
 		Protocol 		TCP Port 		Application(s) 		Data Security
-		FTP 			21 			File 			Cleartext
+		FTP 			21 			      File 			    Cleartext
 		
 		FTPS 			990 			File Transfer 		Encrypted
 
-		HTTP 			80 			Worldwide Web 		Cleartext
+		HTTP 			80 			    Worldwide Web 		Cleartext
 
 		HTTPS 			443 			Worldwide Web 		Encrypted
 
@@ -174,16 +174,16 @@
 
 		POP3S 			995 			Email (MDA) 		Encrypted
 
-		SFTP 			22 			File Transfer 		Encrypted
+		SFTP 			22 			   File Transfer 		Encrypted
 
-		SSH 			22 			Remote Access and	Encrypted
-                                                                file transfer
+		SSH 			22 			  Remote Access and	   Encrypted
+                                      file transfer
 											
-		SMTP 			25 			Email (MTA) 		Cleartext
+		SMTP 			25 			  Email (MTA) 		    Cleartext
 
-		SMTPS 			465 			Email (MTA) 		Encrypted
+		SMTPS 			465 		  Email (MTA) 		    Encrypted
 
-		Telnet 			23 			Remote Access 		Cleartext
+		Telnet 			23 			Remote Access 		    Cleartext
 		
 		
 		Hydra remains a very efficient tool that you can launch from the terminal to try the different passwords. We summarize its main options in the following table.
