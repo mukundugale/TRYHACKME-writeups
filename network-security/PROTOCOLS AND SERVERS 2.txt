@@ -1,0 +1,197 @@
+📌PROTOCOLS AND SERVERS 2 :
+	
+	♦️INTRODUCTION :
+		Before we covered some common protocols in this we cover Servers implementing these protocols are subject to different kinds of attacks :
+		1)Sniffing attack (network packet capture)
+		2)Man-in-the-middle attack
+		3)Password attack(authentication attack)
+		
+		For the security perspective, consider the security triad :Confidentiality,Integrity and Availability (CIA).
+		CONFIDENTIALITY refer to keeping the content of communication accessible to the intended parties.INTEGRITY is refer to any data is sent accurate,consistent and 
+		complete when its reaching its destination.AVAILABILITY refer to services when it needed then it is accessible.
+		DAD refer to Disclosure,Alteration and Destruction which reflect the CIA triad.
+		
+		
+	
+	♦️SNIFFING ATTACK :
+		Sniffing attack refers to using a network packet capture tool to collect information about the target. A simple network packet capture can reveal information,
+		such as the content of private messages and login credentials, if the data isn't encrypted in transit.A sniffing attack can be conducted using an 
+		Ethernet (802.3) network card, provided that the user has proper permissions .
+		Some network packet capturing software as following :
+		1)Tcpdump is CLI-based network capturer
+		2)Wireshark is GUI-based network capturing software
+		3)Tshark is a alternative of wireshark.
+		
+		For ex, a user checks email messages using a pop3 service. we use a tcpdump network capturing software. but in that most important thing is port will be open. 
+		So we type command sudo tcpdump port 110 -A . in this command we use sudo to packet capturing to root privileges , we know that pop3 has default port 110 and we want 
+		to display the content of packet capture in ascii format so we use -A option.
+		So any protocol that uses cleartext communication is susceptible to this kind of attack. The only requirement for this attack to succeed is to have access to a 
+		system between the two communicating systems. This attack requires attention; the mitigation lies in adding an encryption layer on top of any network protocol. 
+		In particular, Transport Layer Security (TLS) has been added to HTTP, FTP, SMTP, POP3, IMAP and many others. For remote access, Telnet has been replaced by the
+		secure alternative Secure Shell (SSH).
+		
+	Questions :
+	1)What do you need to add to the command sudo tcpdump to capture only Telnet traffic?
+	---> port 23
+	2)What is the simplest display filter you can use with Wireshark to show only IMAP traffic?
+	---> imap
+	
+	
+	♦️Man-in-the-middle(MITM)attack :
+		A Man-in-the-Middle (MITM) attack occurs when a victim (A) believes they are communicating with a legitimate destination (B) but is unknowingly communicating 
+		with an attacker (E).For ex, A send message to B and A uses cleartext protocol like FTP or pop3 and an attacker is seated between in network so A send message 
+		like how are you and attacker edit this message where are you and this message will go to B.This will happen because A uses cleartext protocol so this kind of attack 
+		is occured.
+		Any time you browse over HTTP, you are susceptible to a MITM attack, and the scary thing is that you cannot recognize it. Many tools would aid you in carrying
+		out such an attack, such as Ettercap and Bettercap.Mitigation againist this attack is the use of cryptographic protocol like ssh.
+		With the help of Public Key Infrastructure (PKI) and trusted root certificates, Transport Layer Security (TLS) protects from MITM attacks.
+		
+	Questions :
+	1)How many different interfaces does Ettercap offer?
+	---> 3
+	2)In how many ways can you invoke Bettercap?
+	---> 3
+	
+	
+	♦️TRANSPORT LAYER SECURITY(TLS) :
+		TLS (Transport Layer Security) is a cryptographic protocol used to secure communication over a network — most commonly the internet. It ensures that the 
+		data sent between a client (like your browser) and a server (like a website) is encrypted, authenticated, and integrity-protected.
+		lists the protocols we have covered and their default ports before and after the encryption upgrade via SSL/TLS.
+		
+		protocol 	Default Port 	Secured Protocol 	Default Port with TLS
+                  HTTP 	             80 	     HTTPS 	                 443
+                  FTP 	             21 	     FTPS 	                 990
+                  SMTP 	             25 	     SMTPS 	                 465
+                  POP3 	             110 	     POP3S 	                 995
+                  IMAP 	             143 	     IMAPS 	                 993
+                  
+                Consider the case of HTTP.to retrieve a web page over HTTP, the web browser would need at least perform the following two steps:
+                1)To establish a TCP connection with web server.
+                2)To requests a webpage using HTTP requests like GET and POST method
+                
+                Consider the case of HTTPS.HTTPS requires an additional step to encrypt the traffic. The new step takes place after establishing a TCP connection and before 
+                sending HTTP requests.
+                1)To establish a TCP connection with web server.
+                2)Establish a SSL/TLS connection.
+                3)Use HTTP requests to web server.
+                
+                After establishing a TCP connection with the server, the client establishes an SSL/TLS connection,following steps happens:
+                1)he client says “hello” and lists supported TLS versions & ciphers.
+                2)The server responds with its digital certificate (contains public key).
+                3)The client verifies the certificate (using CA trust chain).
+                4)Both agree on encryption algorithms and generate a session key.
+                5)Once the handshake is done, all data is encrypted using symmetric encryption (fast and secure).
+                
+        Questions :1)DNS can also be secured using TLS. What is the three-letter acronym of the DNS protocol that uses TLS?
+        ---> DOT
+        
+        
+        ♦️SECURE SHELL(SSH) :
+        	SSH is used to securly provide remote system administartion in other words you securly connect to another system and execute command on remote system.
+        	To use ssh,you need ssh server and ssh client.ssh client need a username and password and private and public key.
+        	To access another target terminal you need to follow this command : ssh username@target-ip . In that if ssh server is open on default port then you need to
+        	authenticate with password for remote login. Once you authenticate you get a target terminal like mark@ip-<target-ip>:~$
+        	
+        	SSH is very reliable for remote administration because our username and password were sent encrypted; moreover, all commands we execute on the remote system
+        	will be sent over an encrypted channel.We can use SSH to transfer files using SCP (Secure Copy Protocol) based on the SSH protocol.
+        	
+        	command :                      scp ssh username@target-ip:/home/username/file_name . This command copy file from /home/username to (~) home directory .
+        	                                                   OR
+                                               scp file_name ssh username@target-ip:/home/username . This command copy file from (~) to /home/mark.
+                                               
+ 		
+ 	Questions : 1)Use SSH to connect to 10.201.67.130 as mark with the password XBtc49AB. Using uname -r, find the Kernel release?
+ 	---> use command : ssh mark@10.201.67.130 and type password XBtc49AB and use command to see kernel uname -r
+ 	Answer  : 5.15.0-119-generic
+	2)Use SSH to download the file book.txt from the remote system. How many KBs did scp display as download size?
+	---> use command : scp book.txt mark@10.201.67.130:/home/mark
+	Answer : 415 kb
+	
+	
+	♦️PASSWORD ATTACKS :
+		This task will focus on attacks against passwords, i.e. something the target knows. If you revisit the communication with several previous servers using
+		protocols such as Telnet, SSH, POP3, and IMAP, we always need a password to gain access.Attacks against passwords are usually carried out by:
+		
+		1)Password Guessing: Guessing a password requires some knowledge of the target, such as their pet’s name and birth year.
+                2)Dictionary Attack: This approach expands on password guessing and attempts to include all valid words in a dictionary or a wordlist.
+                3)Brute Force Attack: This attack is the most exhaustive and time-consuming where an attacker can go as far as trying all possible character combinations, 
+                which grows fast (exponential growth with the number of characters).
+                
+                We want an automated way to try the common passwords or the entries from a word list; here comes THC Hydra. Hydra supports many protocols, including FTP, POP3,
+                IMAP, SMTP, SSH, and all methods related to HTTP. The general command-line syntax is: hydra -l username -P wordlist.txt server service where we specify the
+                following options:
+                
+                -l username: -l should precede the username, i.e. the login name of the target.
+                -P wordlist.txt: -P precedes the wordlist.txt file, which is a text file containing the list of passwords you want to try with the provided username.
+                server is the hostname or IP address of the target server.
+                service indicates the service which you are trying to launch the dictionary attack.
+                
+                
+                Consider following comman examples :
+                
+                1)hydra -l mark -P /usr/share/wordlists/rockyou.txt 10.201.67.130 ftp will use mark as the username as it iterates over the provided passwords against the FTP server.
+                2)hydra -l mark -P /usr/share/wordlists/rockyou.txt ftp://10.201.67.130 is identical to the previous example. 10.201.67.130 ftp is the same as ftp://10.201.67.130.
+                3)hydra -l frank -P /usr/share/wordlists/rockyou.txt 10.201.67.130 ssh will use frank as the user name as it tries to login via SSH using the different passwords.
+
+		In summary, attacks against login systems can be carried out efficiently using a tool, such as THC Hydra combined with a suitable word list. Mitigation against
+		such attacks can be sophisticated and depends on the target system. A few of the approaches include:
+
+    		1)Password Policy: Enforces minimum complexity constraints on the passwords set by the user.
+    		2)Account Lockout: Locks the account after a certain number of failed attempts.
+    		3)Throttling Authentication Attempts: Delays the response to a login attempt. A couple of seconds of delay is tolerable for someone who knows the password, but they
+    		can severely hinder automated tools.
+   		4)Using CAPTCHA: Requires solving a question difficult for machines. It works well if the login page is via a graphical user interface (GUI). (Note that CAPTCHA
+   		stands for Completely Automated Public Turing test to tell Computers and Humans Apart.)
+    		5)Requiring the use of a public certificate for authentication. This approach works well with SSH, for instance.
+    		6)Two-Factor Authentication: Ask the user to provide a code available via other means, such as email, smartphone app or SMS.
+    		7)There are many other approaches that are more sophisticated or might require some established knowledge about the user, such as IP-based geolocation
+    		
+    	Question : 1)We learned that one of the email accounts is lazie. What is the password used to access the IMAP service on 10.201.67.130?
+    	---> use command : hydra -l lazie -P /usr/share/wordlists/rockyou.txt imap://10.201.67.130
+    	Answer : butterfly
+    	
+    	
+    	♦️SUMMARY :
+    		
+    		It is good to remember the default port number for common protocols. For convenience, the services we covered are listed in the following table sorted by 
+    		alphabetical order.
+
+	
+		Protocol 		TCP Port 		Application(s) 		Data Security
+		FTP 			21 			File 			Cleartext
+		
+		FTPS 			990 			File Transfer 		Encrypted
+
+		HTTP 			80 			Worldwide Web 		Cleartext
+
+		HTTPS 			443 			Worldwide Web 		Encrypted
+
+		IMAP 			143 			Email (MDA) 		Cleartext
+		
+		IMAPS 			993 			Email (MDA) 		Encrypted
+
+		POP3 			110 			Email (MDA) 		Cleartext
+
+		POP3S 			995 			Email (MDA) 		Encrypted
+
+		SFTP 			22 			File Transfer 		Encrypted
+
+		SSH 			22 			Remote Access and	Encrypted
+                                                                file transfer
+											
+		SMTP 			25 			Email (MTA) 		Cleartext
+
+		SMTPS 			465 			Email (MTA) 		Encrypted
+
+		Telnet 			23 			Remote Access 		Cleartext
+		
+		
+		Hydra remains a very efficient tool that you can launch from the terminal to try the different passwords. We summarize its main options in the following table.
+		
+		Option 								Explanation
+		-l username 						Provide the login name
+		-P WordList.txt 					Specify the password list to use
+		server service 						Set the server address and service to attack
+		-s PORT 						Use in case of non-default service port number
+		-V or -vV 						Show the username and password combinations being tried
+		-d 							Display debugging output if the verbose output is not helping
