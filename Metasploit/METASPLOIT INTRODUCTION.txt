@@ -1,0 +1,124 @@
+📌METASPLOIT : INTRODUCTION 
+	
+	♦️INTRODUCTION TO METASPLOIT :
+	
+	Metasploit is a powerful tool for penetration testing engagement from information gathering to post exploitation. Metasploit has two types of versions :
+	1) Metasploit-pro : for commercial purpose and it has GUI interface
+	2) Metasploit-framework : its a CLI-based version and it is a open source containing many tools,modules and more.
+	
+	Metasploit-framework is a set of tools for informarion gathering,scanning,vulnerability research,exploitation,post-exploitation and more.
+	Main components of Metasploit-framework :
+	1)msfconsole : The main command-line interface
+	2)modules : such as exploits,scanner and payloads 
+	3)tools : some of tools msfvenom,pattern_create and pattern_offset.
+	
+	
+	♦️MAIN COMPONENT OF METASPLOIT :
+		You can luanch metasploit through msfconsole.Modules are small component of metasploi-framework that are built to perform a specific task such as exploitation,
+		scanning a target and brute-force attack.
+		
+		some important concepts :
+		1)exploit : A piece of code that uses vulnerability on the target system.
+		2)vulnerability : A logic,design or flaw affecting the target system.
+		3)payload : it is code that run on the target system that can lead to gaining system access or leak confidential information.
+		
+		
+		1)Auxilary : 
+			Any supporting module,such as fuzzers,scanner and crawlers can be found here.
+		2)Encoders : 
+			Encoders will allow you to encode exploit and payload that signature-based antivirus may miss them.
+		3)evasion :
+			While encoders will encode the payload, they should not be considered a direct attempt to evade antivirus software. On the other hand, “evasion” modules
+			will try that, with more or less success.
+		4)exploits :
+			A piece of code that uses vulnerability on the target system.
+		5)payload  :
+			a code that run on target system. under payload has four directories :
+			1)Adapters :
+				An adapter wrap single payload to convert into different format.
+			2)Singles :
+				self-contained payload that contain everything in a single file/message no second download.indicated by the “_” between “shell” and “reverse”
+			3)Stagers :
+				Stagers are small bootstrap paylaods.it used to create a communucation channel between metasploit and target system.
+				ndicated by the “/” between “shell” and “reverse”.
+			4)Stage :
+				Downloaded by stagers . its used to dowmload large size payload.
+				
+		6)post :
+			Post modules will be useful on the final stage of the penetration testing process listed above, post-exploitation.
+			
+	Questions : 1)What is the name of the code taking advantage of a flaw on the target system?
+	---> exploit
+	2)What is the name of the code that runs on the target system to achieve the attacker's goal? 
+	---> payload
+	3)What are self-contained payloads called?
+	---> stagers
+	4)Is "windows/x64/pingback_reverse_tcp" among singles or staged payload? 
+	---> singles
+	
+	
+	♦️MSFCONSOLE :
+		
+		you can launch framework by typing msfconsole on your terminal.some of following commands :
+		
+		1)help :
+			The help command can be used on its own or for a specific command.
+			usage : help set [option] [value]
+		2)history :
+			You can use the history command to see commands you have typed earlier.
+			usage : history
+		3)show :
+			This will print options related to the exploit.
+		4)info :
+			it will display detailed information on the module such as its author, relevant sources, etc.
+		5)search :
+			This command will search the Metasploit Framework database for modules relevant to the given search parameter. You can conduct searches using
+			CVE numbers, exploit names (eternalblue, heartbleed, etc.), or target system.
+		
+		You can direct the search function using keywords such as type and platform.
+		command : search type:auxiliary telnet
+		
+	Queations : 1)How would you search for a module related to Apache?
+	---> search Apache
+	2)Who provided the auxiliary/scanner/ssh/ssh_login module?
+	---> use command : use auxiliary/scanner/ssh/ssh_login
+	Answer : todb
+	
+	
+	♦️WORKING WITH MODULES :
+		
+		In this task, we will set the RHOSTS parameter to the IP address of our target system using the set command.
+		command : set RHOSTS <target-ip>
+		you can use the show options command to check the value was set correctly.
+		parameters :
+		1)RHOSTS : Remote host ,the ip address of the target system.also you can set single ip or full network range ip.
+		2)PAYLOAD : the payload will you use with exploit.
+		3)RPORT : Remote port, port that running on target system.
+		4)LHOSTS : localhost,the attacking machine ip
+		5)LPORT : localport, the port that want to reverse shell on port
+		
+		unset :
+			you can also clear any parameter value using the unset command or clear all set parameters with the unset all command.
+			
+		setg : 
+			The setg command sets a global value that will be used until you exit Metasploit or clear it using the unsetg command.
+			
+		sessions :
+			The sessions command can be used from the msfconsole prompt or any context to see the existing sessions.
+		session -i :
+			To interact with any session, you can use the sessions -i command followed by the desired session number.
+			
+	Questions :1)How would you set the LPORT value to 6666?
+	---> set LPORT 6666
+	2)How would you set the global value for RHOSTS  to 10.10.19.23 ? 
+	---> setg RHOSTS 10.10.19.23
+	3)What command would you use to clear a set payload?
+	---> unset payload
+	4)What command do you use to proceed with the exploitation phase?
+	---> exploit
+	
+	
+	
+	
+
+
